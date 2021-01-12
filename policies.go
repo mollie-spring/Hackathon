@@ -12,6 +12,7 @@ policy_a := "Part Type A"
 policy_a := "Part Type B"
 policy_all := "Part Type A OR Part Type B"
 
+
 // MSP structures for all policies
 mspAudit, _ := abe.BooleanToMSP(policy_audit, false) // The MSP structure defining the policy for an Audit case
 mspBreakGlass, _ := abe.BooleanToMSP(policy_breakGlass, false) // The MSP structure defining the policy for an extreme audit where a Manager/Auditor role is needed

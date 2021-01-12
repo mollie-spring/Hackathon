@@ -9,10 +9,17 @@ import (
 func setup()  {
 	a := abe.NewFAME() // Create the scheme instance
 	pubKey, secKey, _ := a.GenerateMasterKeys()
-	// policies should be activated here
-	manager_keys, auditor_keys, supervisor_keys, par1_keys, par2_keys, par3_keys := init_roles(secKey)
+
+	f_pub, __ := os.Create("/keys/pubkey")
+    defer f_pub.Close()
+	n1, __ := f_pub.WriteString(pubkey)
 	
-	return pubKey, secKey, manager_keys, auditor_keys, supervisor_keys, par1_keys, par2_keys, par3_keys
+	f_sec, __ := os.Create("/keys/seckey")
+    defer f_sec.Close()
+    n2, __ := f_sec.WriteString(seckey)
+
+	// policies should be activated here
+	init_roles(secKey)
 
 }
 

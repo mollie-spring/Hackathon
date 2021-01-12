@@ -8,12 +8,9 @@ import (
 
 func main()  {
 	
-	pubKey, secKey, manager_keys, auditor_keys, supervisor_keys, par1_keys, par2_keys, par3_keys = setup()
+	setup()
 	// eventually make it so all the keys are written to files so that the main program doesn't 'see' them
 
-	// encrypt function by a participant
-
-	// attempt to decrypt by a different participant
 
 	// attempt to decrypt by an auditor
 	
@@ -22,3 +19,8 @@ func main()  {
 }
 
 
+mspAudit, _ := abe.BooleanToMSP(policy_audit, false) // The MSP structure defining the policy for an Audit case
+mspBreakGlass, _ := abe.BooleanToMSP(policy_breakGlass, false) // The MSP structure defining the policy for an extreme audit where a Manager/Auditor role is needed
+mspA, _ := abe.BooleanToMSP(policy_a, false) // The MSP structure defining the policy for Participant B
+mspB, _ := abe.BooleanToMSP(policy_b, false) // The MSP structure defining the policy for Participant A
+mspAll, _ := abe.BooleanToMSP(policy_all, false) // The MSP structure defining the policy for both Type A and B Participants
