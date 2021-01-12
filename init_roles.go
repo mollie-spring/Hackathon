@@ -1,7 +1,7 @@
+package main
 import (
 	"os"
-	"/Users/molliezechlin/go/src/github.com/fentec-project/gofe/abe"
-	"seckey"
+	"github.com/fentec-project/gofe/abe"
 )
 
 

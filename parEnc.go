@@ -1,11 +1,12 @@
+package main
+
 import (
-	"policies"
 )
 
 func partipantEncrypts() {
 	
 	msg = "Here's lookin' at you kid."
-	
+
 	// encrypt function by a participant
 	ciphertext1 = encrypt(msg, mspAudit) 
 
@@ -21,4 +22,5 @@ func partipantEncrypts() {
 	// encrypt function by a participant
 	ciphertext5 = encrypt(msg, mspAll) 
 
+	return ciphertext1, ciphertext2, ciphertext3, ciphertext4, ciphertext5
 }

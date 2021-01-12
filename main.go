@@ -1,9 +1,7 @@
+package main
 import (
-	"os"
-	"/Users/molliezechlin/go/src/github.com/fentec-project/gofe/abe"
-	"init_roles"
-	"policies"
 )
+
 
 
 func main()  {
@@ -11,16 +9,13 @@ func main()  {
 	setup()
 	// eventually make it so all the keys are written to files so that the main program doesn't 'see' them
 
+	// A participant encrypts 1 message in various policies and submits to the manager
+	cipher1, cipher2, cipher3, cipher4, cipher5 = partipantEncrypts()
 
-	// attempt to decrypt by an auditor
-	
+
+	// attempt to decrypt by participant1
+	 //potential_msg1 = decrypt()
 
 
 }
 
-
-mspAudit, _ := abe.BooleanToMSP(policy_audit, false) // The MSP structure defining the policy for an Audit case
-mspBreakGlass, _ := abe.BooleanToMSP(policy_breakGlass, false) // The MSP structure defining the policy for an extreme audit where a Manager/Auditor role is needed
-mspA, _ := abe.BooleanToMSP(policy_a, false) // The MSP structure defining the policy for Participant B
-mspB, _ := abe.BooleanToMSP(policy_b, false) // The MSP structure defining the policy for Participant A
-mspAll, _ := abe.BooleanToMSP(policy_all, false) // The MSP structure defining the policy for both Type A and B Participants

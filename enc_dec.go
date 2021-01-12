@@ -1,19 +1,24 @@
+package main
+
 import (
 	"os"
-	"/Users/molliezechlin/go/src/github.com/fentec-project/gofe/abe"
-	"pubKey"
+	"github.com/fentec-project/gofe/abe"
 )
 
-file, err := os.Open("pubkey")
-n = file.Read(pubkey)
-defer file.Close()
 
-func encrypt(msg, msp)  {
+
+func encrypt(msg string, msp *MSP)  {
+	file, err := os.Open("keys/pubkey")
+	n = file.Read(pubKey *FAMEPubKey)
+	defer file.Close()
 	cipher, _ := a.Encrypt(msg, msp, pubKey)
 	return cipher
 }
 
-func decrypt(cipher, keys)  {
+func decrypt(cipher *FAMECipher, keys *FAMESecKey)  {
+	file, err := os.Open("keys/pubkey")
+	n = file.Read(pubkey)
+	defer file.Close()
 	dec, _ := a.Decrypt(cipher, keys, pubKey) // Decrypt the message
 	return dec
 }
