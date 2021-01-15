@@ -6,9 +6,6 @@ import (
 
 
 
-
-
-
 func Setup() (*abe.FAME, *abe.FAMEPubKey, 
 	*abe.FAMEAttribKeys, *abe.FAMEAttribKeys, *abe.FAMEAttribKeys, *abe.FAMEAttribKeys, *abe.FAMEAttribKeys, *abe.FAMEAttribKeys, 
 	*abe.MSP, *abe.MSP, *abe.MSP, *abe.MSP, *abe.MSP) {

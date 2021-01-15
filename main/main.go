@@ -10,7 +10,6 @@ import (
 
 
 
-
 func main() {
 	
 	// Scheme is established, roles assigned, policies made, public, secret and attribute-specific keys generated
