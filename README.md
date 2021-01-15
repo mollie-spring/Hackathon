@@ -12,8 +12,8 @@ The file `enc_dec.go` sets up functions to enable the demo. The function `Partic
 The function `Decryption` attempts to decrypt each given ciphertext with the given attribute-based key. The results shown describe what you should be seeing based on what permissions each of the roles have. 
 
 
-## Initialize file
-The initialize file contains the necessary functions to setup the the ABE FAME scheme given specific roles (or people within the network) and policies. To create this instance and enable encryption and decryptions, begin by calling `initialize.Setup()` from the main file.
+## Initialize
+`initialize.go` contains the necessary functions to setup the the ABE FAME scheme given specific roles (or people within the network) and policies. To create this instance and enable encryption and decryptions, begin by calling `initialize.Setup()` from the main file.
 
 ### Adding a role
 To add a role to the list (in other words, add a person to the network given specific attributes that apply to them), a string containing their attributes must be defined. For example, adding ` manager2 := []string{"Manager"}` would add a second manager with the same permissions as the first. 
@@ -31,4 +31,5 @@ The function `init_policies` lists the policies available and creates the necess
     mspNew, _ := abe.BooleanToMSP(policy_new, false)
     
 
-## Future work
+## Future Developments
+In a further iteration of this project I would like to structure encryptions to allow for a layered approach to decryption access. This would be most useful in cases in which the policy used to encrypt used an "OR" statement and the information available upon decrypting should be available only in part to one of the roles allowed in the policy. For example, say a participant in the network wants to make their data available to other participants and to an auditor (not a participant that is also an auditor), however the auditor shouldn't be able to see the cleartext data, just proof of another nature, while the participant requesting data within the network should be able to see all the available data. In this case, the encrypting participant would first encrypt what it would only want the other participant to see using a policy allowing only participants to see it, then encrypt this ciphertext as well as the other data that is meant for the auditor as well using a policy in which either the participant "OR" the auditor is able to decrypt it. 
