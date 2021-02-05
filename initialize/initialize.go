@@ -2,9 +2,7 @@ package initialize
 
 import (
 	"github.com/fentec-project/gofe/abe" 
-	//"bytes"
 	"encoding/json"
-	//"fmt"
 	"os"
 )
 
@@ -14,16 +12,22 @@ func Setup() {
 	
 	scheme := abe.NewFAME() // Create the scheme instance
 	schemeBytes, _ := json.Marshal(scheme)
-	os.Setenv("SCHEME", string(schemeBytes))
+	f1, _ := os.Create("../variables/scheme")
+    defer f1.Close()
+    f1.Write(schemeBytes)
 
 	// Generate public and secret keys for instance
 	pubKey, secKey, _ := scheme.GenerateMasterKeys()
 
 	pubKeyBytes, _ := json.Marshal(pubKey)
-	os.Setenv("PUBKEY", string(pubKeyBytes))
+	f2, _ := os.Create("../variables/pubkey")
+    defer f2.Close()
+	f2.Write(pubKeyBytes)
 
 	secKeyBytes, _ := json.Marshal(secKey)
-	os.Setenv("SECKEY", string(secKeyBytes))
+	f3, _ := os.Create("../variables/seckey")
+    defer f3.Close()
+    f3.Write(secKeyBytes)
 
 
 	// Assign roles (or attributes) to each 'person' engaging in network
@@ -43,22 +47,34 @@ func Setup() {
 	par3Keys, _ := scheme.GenerateAttribKeys(participant3, secKey) // Generate keys with attributes of Participant3
 	
 	managerKeysBytes, _ := json.Marshal(managerKeys)
-	os.Setenv("MANAGERKEYS", string(managerKeysBytes))
+	f4, _ := os.Create("../variables/managerkeys")
+    defer f4.Close()
+    f4.Write(managerKeysBytes)
 
 	auditorKeysBytes, _ := json.Marshal(auditorKeys)
-	os.Setenv("AUDITORKEYS", string(auditorKeysBytes))
+	f5, _ := os.Create("../variables/auditorkeys")
+    defer f5.Close()
+    f5.Write(auditorKeysBytes)
 	
 	supervisorKeysBytes, _ := json.Marshal(supervisorKeys)
-	os.Setenv("SUPERVISORKEYS", string(supervisorKeysBytes))
+	f6, _ := os.Create("../variables/supervisorkeys")
+    defer f6.Close()
+    f6.Write(supervisorKeysBytes)
 	
 	par1KeysBytes, _ := json.Marshal(par1Keys)
-	os.Setenv("PAR1KEYS", string(par1KeysBytes))
+	f7, _ := os.Create("../variables/par1keys")
+    defer f7.Close()
+    f7.Write(par1KeysBytes)
 	
 	par2KeysBytes, _ := json.Marshal(par2Keys)
-	os.Setenv("PAR2KEYS", string(par2KeysBytes))
+	f8, _ := os.Create("../variables/par2keys")
+    defer f8.Close()
+    f8.Write(par2KeysBytes)
 
 	par3KeysBytes, _ := json.Marshal(par3Keys)
-	os.Setenv("PAR3KEYS", string(par3KeysBytes))
+	f9, _ := os.Create("../variables/par3keys")
+    defer f9.Close()
+    f9.Write(par3KeysBytes)
 
 	init_policies()
 
@@ -83,18 +99,28 @@ func init_policies() {
 	mspAll, _ := abe.BooleanToMSP(policy_all, false) // The MSP structure defining the policy for both Type A and B Participants
 
 	mspAuditBytes, _ := json.Marshal(mspAudit)
-	os.Setenv("MSP_AUDIT", string(mspAuditBytes))
+	f1, _ := os.Create("../policies/mspaudit")
+    defer f1.Close()
+    f1.Write(mspAuditBytes)
 
 	mspBreakGlassBytes, _ := json.Marshal(mspBreakGlass)
-	os.Setenv("MSP_BREAKGLASS", string(mspBreakGlassBytes))
+	f2, _ := os.Create("../policies/mspbreakglass")
+    defer f2.Close()
+    f2.Write(mspBreakGlassBytes)
 
 	mspABytes, _ := json.Marshal(mspA)
-	os.Setenv("MSP_A", string(mspABytes))
+	f3, _ := os.Create("../policies/msp_a")
+    defer f3.Close()
+    f3.Write(mspABytes)
 
 	mspBBytes, _ := json.Marshal(mspB)
-	os.Setenv("MSP_B", string(mspBBytes))
+	f4, _ := os.Create("../policies/msp_b")
+    defer f4.Close()
+    f4.Write(mspBBytes)
 
 	mspAllBytes, _ := json.Marshal(mspAll)
-	os.Setenv("MSP_ALL", string(mspAllBytes))
+	f5, _ := os.Create("../policies/msp_all")
+    defer f5.Close()
+    f5.Write(mspAllBytes)
 }
 
