@@ -2,140 +2,121 @@ package enc_dec
 
 import (
 	"github.com/fentec-project/gofe/abe"
+	"encoding/json"
 	"fmt"
 	"os"
-	"encoding/json"
+	"io/ioutil"
 )
 
 
 
-func PartipantEncrypts() (*abe.FAMECipher, *abe.FAMECipher, *abe.FAMECipher, *abe.FAMECipher, *abe.FAMECipher) {
+func PartipantEncrypts(msg string, policy string) {
 	
-	msg1 := "Here's lookin' at you, kid."
-	msg2 := "Frankly, my dear, I don't give a damn."
-	msg3 := "May the Force be with you."
-	msg4 := "You're a wizard, Harry."
-	msg5 := "I see dead people."
-
 	var pubKey *abe.FAMEPubKey
-	pubKeyBytes := os.Getenv("PUBKEY")
+	pubKeyBytes, _ := ioutil.ReadFile("../variables/pubkey")
 	json.Unmarshal([]byte(pubKeyBytes), &pubKey)
 
-	fmt.Printf("A participant encrypts 5 different strings in 5 different policies.\n\n")
-
-	var mspAudit *abe.MSP
-	mspAuditBytes := os.Getenv("MSP_AUDIT")
-	json.Unmarshal([]byte(mspAuditBytes), &mspAudit)
-
-	var mspBreakGlass *abe.MSP
-	mspBreakGlassBytes := os.Getenv("MSP_BREAKGLASS")
-	json.Unmarshal([]byte(mspBreakGlassBytes), &mspBreakGlass)
-
-	var mspA *abe.MSP
-	mspABytes := os.Getenv("MSP_A")
-	json.Unmarshal([]byte(mspABytes), &mspA)
-
-	var mspB *abe.MSP
-	mspBBytes := os.Getenv("MSP_B")
-	json.Unmarshal([]byte(mspBBytes), &mspB)
-
-	var mspAll *abe.MSP
-	mspAllBytes := os.Getenv("MSP_ALL")
-	json.Unmarshal([]byte(mspAllBytes), &mspAll)
-
 	var scheme *abe.FAME
-	schemeBytes := os.Getenv("SCHEME")
+	schemeBytes, _ := ioutil.ReadFile("../variables/scheme")
 	json.Unmarshal([]byte(schemeBytes), &scheme)
+
+	var msp *abe.MSP
+
+	if policy == "Audit" {
+		mspBytes, _ := ioutil.ReadFile("../policies/mspaudit")
+		json.Unmarshal([]byte(mspBytes), &msp)
+	} else if policy == "Break glass" {
+		mspBytes, _ := ioutil.ReadFile("../policies/mspbreakglass")
+		json.Unmarshal([]byte(mspBytes), &msp)
+	} else if policy == "Type A" {
+		mspBytes, _ := ioutil.ReadFile("../policies/msp_b")
+		json.Unmarshal([]byte(mspBytes), &msp)
+	} else if policy == "Type B" {
+		mspBytes, _ := ioutil.ReadFile("../policies/msp_all")
+		json.Unmarshal([]byte(mspBytes), &msp)
+	} else if policy == "All Types" {
+		mspBytes, _ := ioutil.ReadFile("../policies/mspa")
+		json.Unmarshal([]byte(mspBytes), &msp)
+	} else {
+		fmt.Printf("%s is not a valid policy!\n", policy)
+	}
 
 	// encrypt function by a participant (auditor or any participants)
-	cipher1, _ := scheme.Encrypt(msg1, mspAudit, pubKey)
+	ciphertext, _ := scheme.Encrypt(msg, msp, pubKey)
 
-	// // encrypt function by a participant (auditor and manager - supervisor only)
-	cipher2, _ := scheme.Encrypt(msg2, mspBreakGlass, pubKey)
+	cipherBytes, _ := json.Marshal(ciphertext)
 
-	// // encrypt function by a participant (Type A Par only! - Par 1 and 2)
-	cipher3, _ := scheme.Encrypt(msg3, mspA, pubKey)
+	f, _ := os.Create("ciphertext")
+    defer f.Close()
+    f.Write(cipherBytes)
 
-	// // encrypt function by a participant (Type B Par only - Par 1 and 3)
-	cipher4, _ := scheme.Encrypt(msg4, mspB, pubKey)
-
-	// // encrypt function by a participant (Either Participant Type - Par 1, 2, and 3)
-	cipher5, _ := scheme.Encrypt(msg5, mspAll, pubKey)
-
-	return cipher1, cipher2, cipher3, cipher4, cipher5
 }
 
 
-func Decryption(attribKey *abe.FAMEAttribKeys,
-	cipher1 *abe.FAMECipher, cipher2 *abe.FAMECipher, cipher3 *abe.FAMECipher, cipher4 *abe.FAMECipher, cipher5 *abe.FAMECipher)	{
+func Decryption(attribKey *abe.FAMEAttribKeys)	{
 
 	var scheme *abe.FAME
-	schemeBytes := os.Getenv("SCHEME")
+	schemeBytes, _ := ioutil.ReadFile("../variables/scheme")
 	json.Unmarshal([]byte(schemeBytes), &scheme)
 
 	var pubKey *abe.FAMEPubKey
-	pubKeyBytes := os.Getenv("PUBKEY")
+	pubKeyBytes, _ := ioutil.ReadFile("../variables/pubkey")
 	json.Unmarshal([]byte(pubKeyBytes), &pubKey)
 	
-	// attempt to decrypt all ciphers using the given attribute-based key
-	dec_cipher1, _ := scheme.Decrypt(cipher1, attribKey, pubKey)
-	fmt.Printf("Decryption 1: %v \n", dec_cipher1)
-	dec_cipher2, _ := scheme.Decrypt(cipher2, attribKey, pubKey)
-	fmt.Printf("Decryption 2: %v \n", dec_cipher2)
-	dec_cipher3, _ := scheme.Decrypt(cipher3, attribKey, pubKey)
-	fmt.Printf("Decryption 3: %v \n", dec_cipher3)
-	dec_cipher4, _ := scheme.Decrypt(cipher4, attribKey, pubKey)
-	fmt.Printf("Decryption 4: %v \n", dec_cipher4)
-	dec_cipher5, _ := scheme.Decrypt(cipher5, attribKey, pubKey)
-	fmt.Printf("Decryption 5: %v \n", dec_cipher5)
+	var ciphertext *abe.FAMECipher
+	cipherBytes, _ := ioutil.ReadFile("ciphertext")
+	json.Unmarshal([]byte(cipherBytes), &ciphertext)
 
+	// attempt to decrypt all ciphers using the given attribute-based key
+	dec_cipher, _ := scheme.Decrypt(ciphertext, attribKey, pubKey)
+	fmt.Printf("Decryption: %v \n", dec_cipher)
 	
 }
 
 
-func RoleDecrypts(role string, 	cipher1 *abe.FAMECipher, cipher2 *abe.FAMECipher, cipher3 *abe.FAMECipher, cipher4 *abe.FAMECipher, cipher5 *abe.FAMECipher)	{
+func RoleDecrypts(role string)	{	
 
 	if role == "Manager" {
 		var managerKeys	*abe.FAMEAttribKeys
-		managerKeysBytes := os.Getenv("MANAGERKEYS")
+		managerKeysBytes, _ := ioutil.ReadFile("../variables/managerkeys")
 		json.Unmarshal([]byte(managerKeysBytes), &managerKeys)
 
-		Decryption(managerKeys, cipher1, cipher2, cipher3, cipher4, cipher5)
+		Decryption(managerKeys)
 	
 	} else if role == "Auditor" {
 		var auditorKeys	*abe.FAMEAttribKeys
-		auditorKeysBytes := os.Getenv("AUDITORKEYS")
+		auditorKeysBytes, _ := ioutil.ReadFile("../variables/auditorkeys")
 		json.Unmarshal([]byte(auditorKeysBytes), &auditorKeys)
 
-		Decryption(auditorKeys, cipher1, cipher2, cipher3, cipher4, cipher5)
+		Decryption(auditorKeys)
 	
 	} else if role == "Supervisor" {
 		var supervisorKeys	*abe.FAMEAttribKeys
-		supervisorKeysBytes := os.Getenv("SUPERVISORKEYS")
+		supervisorKeysBytes, _ := ioutil.ReadFile("../variables/supervisorkeys")
 		json.Unmarshal([]byte(supervisorKeysBytes), &supervisorKeys)
 
-		Decryption(supervisorKeys, cipher1, cipher2, cipher3, cipher4, cipher5)
+		Decryption(supervisorKeys)
 	
 	} else if role == "Participant 1" {
 		var par1Keys	*abe.FAMEAttribKeys
-		par1KeysBytes := os.Getenv("PAR1KEYS")
+		par1KeysBytes, _ := ioutil.ReadFile("../variables/par1keys")
 		json.Unmarshal([]byte(par1KeysBytes), &par1Keys)
 
-		Decryption(par1Keys, cipher1, cipher2, cipher3, cipher4, cipher5)
+		Decryption(par1Keys)
 	
 	} else if role == "Participant 2" {
 		var par2Keys	*abe.FAMEAttribKeys
-		par2KeysBytes := os.Getenv("PAR2KEYS")
+		par2KeysBytes, _ := ioutil.ReadFile("../variables/par2keys")
 		json.Unmarshal([]byte(par2KeysBytes), &par2Keys)
 
-		Decryption(par2Keys, cipher1, cipher2, cipher3, cipher4, cipher5)
+		Decryption(par2Keys)
 	
 	} else if role == "Participant 3" {
 		var par3Keys	*abe.FAMEAttribKeys
-		par3KeysBytes := os.Getenv("PAR3KEYS")
+		par3KeysBytes, _ := ioutil.ReadFile("../variables/par3keys")
 		json.Unmarshal([]byte(par3KeysBytes), &par3Keys)
 		
-		Decryption(par3Keys, cipher1, cipher2, cipher3, cipher4, cipher5)
+		Decryption(par3Keys)
 	
 	} else {
 		fmt.Printf("%s is not a valid role!\n", role)

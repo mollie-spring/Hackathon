@@ -12,26 +12,54 @@ import (
 
 func main() {
 	
-	// Scheme is established, roles assigned, policies made, public, secret and attribute-specific keys generated
-	initialize.Setup()
 	
-
-	
-	// A participant encrypts 1 message in various policies and submits to the manager
-	cipher1, cipher2, cipher3, cipher4, cipher5 := enc_dec.PartipantEncrypts()
-	
-
-	fmt.Println("Enter Your First Name: ") 
+	fmt.Println("Enter Your Intent (Setup, Encrypt, Decrypt): ") 
   
-    // var then variable name then variable type  
 	
     scanner := bufio.NewScanner(os.Stdin)
     scanner.Scan() // use `for scanner.Scan()` to keep reading
-    role := scanner.Text()
+    intent := scanner.Text()
 
-	fmt.Printf("\n %s attempts to decrypt all 5 ciphers!\n", role)
-	enc_dec.RoleDecrypts(role, cipher1, cipher2, cipher3, cipher4, cipher5)
+	
+	if intent == "Setup" {
 
+		// Scheme is established, roles assigned, policies made, public, secret and attribute-specific keys generated
+		initialize.Setup()
+		fmt.Printf("Attribute Based Encryption initialized\n")
+
+	} else if intent == "Encrypt" {
+
+		fmt.Printf("What would you like to encrypt?\n")		
+		
+		scanner := bufio.NewScanner(os.Stdin)
+		scanner.Scan() // use `for scanner.Scan()` to keep reading
+		plaintext := scanner.Text()
+
+		fmt.Println("Enter the Policy (Audit, Break glass, Type A, Type B, All Types): ") 
+  
+    	// var then variable name then variable type  
+	
+    	scanner.Scan() // use `for scanner.Scan()` to keep reading
+    	policy := scanner.Text()
+
+		// A participant encrypts 1 message in various policies and submits to the manager
+		enc_dec.PartipantEncrypts(plaintext, policy)
+
+	} else if intent == "Decrypt" {
+
+		fmt.Println("Enter Your Role: ") 
+  
+    	// var then variable name then variable type  
+
+    	scanner.Scan() // use `for scanner.Scan()` to keep reading
+    	role := scanner.Text()
+
+		fmt.Printf("\n %s attempts to decrypt the ciphertext!\n", role)
+		enc_dec.RoleDecrypts(role)
+	
+	}
+
+	
 }
 
 
