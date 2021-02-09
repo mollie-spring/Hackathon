@@ -3,7 +3,7 @@
 ### Summary of Project
 My project focuses on a use case of Attribute-based Encryption in which a network of participants send encryptions meant for other participants to a managing server. The participants are able to use attributes to manage who is able to decrypt their ciphertext by implementing policies. While creating this project I focused on an auditing case in which a participant may enable auditing by encrypting it with the policy “Participant OR Auditor” and therefore either another participant or an auditor (as designated by the managing server) would be able to decrypt the ciphertext. This method also enables the participants who distinguish between types of participants who would be able to decrypt their ciphertext. Although it is not displayed in the demo, this project also focused on layering this encryption in a fashion that would allow for a transmission of one ciphertext that had another ciphertext revealed once decrypted allowing only a further subset of attribute-owners to see the second layer ciphertext. The prototype written during this hackathon uses the FAME scheme within the GoFE library.
 
-
+WARNING ---- this file is not up to date with the latest commits!
 ## The Demo files
 The demo shown by running `main.go` has one participant encrypt 5 different plaintexts with 5 different policies and then have each of the given roles attempt to decrypt all 5 ciphertexts. This accents how the effect ABE has on the exchange of data and restricting that exchange within a network of entities.
 
