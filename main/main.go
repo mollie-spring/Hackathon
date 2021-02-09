@@ -47,7 +47,7 @@ func main() {
 
 	} else if intent == "Decrypt" {
 
-		fmt.Println("Enter Your Role: ") 
+		fmt.Println("Enter Your Role: (Auditor 1, Manager 1, Supervisor 1, Participant 1, Participant 2, Participant 3)") 
   
     	// var then variable name then variable type  
 

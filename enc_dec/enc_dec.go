@@ -29,13 +29,13 @@ func PartipantEncrypts(msg string, policy string) {
 		mspBytes, _ := ioutil.ReadFile("../policies/mspbreakglass")
 		json.Unmarshal([]byte(mspBytes), &msp)
 	} else if policy == "Type A" {
-		mspBytes, _ := ioutil.ReadFile("../policies/msp_b")
+		mspBytes, _ := ioutil.ReadFile("../policies/msp_a")
 		json.Unmarshal([]byte(mspBytes), &msp)
 	} else if policy == "Type B" {
-		mspBytes, _ := ioutil.ReadFile("../policies/msp_all")
+		mspBytes, _ := ioutil.ReadFile("../policies/msp_b")
 		json.Unmarshal([]byte(mspBytes), &msp)
 	} else if policy == "All Types" {
-		mspBytes, _ := ioutil.ReadFile("../policies/mspa")
+		mspBytes, _ := ioutil.ReadFile("../policies/msp_all")
 		json.Unmarshal([]byte(mspBytes), &msp)
 	} else {
 		fmt.Printf("%s is not a valid policy!\n", policy)
@@ -76,21 +76,21 @@ func Decryption(attribKey *abe.FAMEAttribKeys)	{
 
 func RoleDecrypts(role string)	{	
 
-	if role == "Manager" {
+	if role == "Manager 1" {
 		var managerKeys	*abe.FAMEAttribKeys
 		managerKeysBytes, _ := ioutil.ReadFile("../variables/managerkeys")
 		json.Unmarshal([]byte(managerKeysBytes), &managerKeys)
 
 		Decryption(managerKeys)
 	
-	} else if role == "Auditor" {
+	} else if role == "Auditor 1" {
 		var auditorKeys	*abe.FAMEAttribKeys
 		auditorKeysBytes, _ := ioutil.ReadFile("../variables/auditorkeys")
 		json.Unmarshal([]byte(auditorKeysBytes), &auditorKeys)
 
 		Decryption(auditorKeys)
 	
-	} else if role == "Supervisor" {
+	} else if role == "Supervisor 1" {
 		var supervisorKeys	*abe.FAMEAttribKeys
 		supervisorKeysBytes, _ := ioutil.ReadFile("../variables/supervisorkeys")
 		json.Unmarshal([]byte(supervisorKeysBytes), &supervisorKeys)
